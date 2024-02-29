@@ -23,8 +23,15 @@ Route::get('/', function () {
 });
 Route::get('/register', [AuthController::class, 'index'])->name('register');
 Route::post('/register', [AuthController::class,'register'])->name('register.post');
-Route::get('/login', [AuthController::class, 'login'])->name('login');
-Route::post('/login', [AuthController::class, 'auth'])->name('login.post');
-Route::post('/dashboard', [AuthController::class,'logout'])->name('logout');
-Route::get('/dashboard', [DashboardController::class,'index'])->name('dashboard');
 Route::get('/image', [ImageController::class,'index'])->name('image');
+Route::post('/image', [ImageController::class,'ph'])->name('image');
+
+Route::group(['middleware' => 'auth.user'], function () {
+    // Здесь ваши защищенные маршруты
+    Route::get('/login', [AuthController::class, 'login'])->name('login');
+    Route::post('/login', [AuthController::class, 'auth'])->name('login.post');
+    Route::get('/dashboard', [DashboardController::class,'index'])->name('dashboard');
+    Route::post('/dashboard', [AuthController::class,'logout'])->name('logout');
+});
+
+Route::get('/papka', [ImageController::class, 'ppp'])->name('papka.ppp');

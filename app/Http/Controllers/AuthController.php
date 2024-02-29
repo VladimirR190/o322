@@ -24,10 +24,11 @@ class AuthController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required|confirmed',
-            'userphoto' => 'image',
+            'UserPhoto' => 'image',
         ]);
         if ($request->hasFile('UserPhoto')) {
-            $photoPath = $request->file('UserPhoto')->store('photos');
+            $photoPath = $request->file('UserPhoto')->store('public/photos');
+            $photoPath = str_replace('public/', '', $photoPath); 
         } else {
             $photoPath = 'photos/default.jpg';
         }
@@ -65,6 +66,6 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->forget('user_name');
         $request->session()->forget('user_photo');
-        return redirect('/login');
+        return redirect('/dashboard');
     }
 }
