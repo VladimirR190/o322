@@ -10,12 +10,12 @@ class AuthController extends Controller
 {
     public function index(Request $request)
     {
-        return view('register');
+        return view('auth.register');
     }
 
     public function login(Request $request)
     {
-        return view('login');
+        return view('auth.login');
     }
 
     public function register(Request $request)
