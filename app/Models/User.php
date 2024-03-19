@@ -10,7 +10,14 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
+    
     use HasApiTokens, HasFactory, Notifiable;
+
+    public function isAdmin()
+     {
+         return $this->role === 'Администратор'; // Пример проверки роли администратора
+     }
+    
 
     /**
      * The attributes that are mass assignable.
@@ -21,6 +28,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'UserPhoto',
+        'photo',
+        'Role',
     ];
 
     /**
@@ -42,4 +52,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    
+     
 }

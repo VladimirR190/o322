@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ImageController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
@@ -20,9 +23,23 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/register', [AuthController::class, 'index'])->name('register');
-Route::post('/register', [AuthController::class,'register'])->name('register.post');
-Route::get('/login', [AuthController::class, 'login'])->name('login');
-Route::post('/login', [AuthController::class, 'auth'])->name('login.post');
-Route::post('/dashboard', [AuthController::class,'logout'])->name('logout.post');
-Route::get('/dashboard', [DashboardController::class,'index'])->name('dashboard');
+Route::get('/register', [AuthController::class, 'index'])->name('auth.register');
+Route::post('/register', [AuthController::class,'register'])->name('auth.register.post');
+Route::get('/image', [ImageController::class,'index'])->name('image');
+Route::post('/image', [ImageController::class,'ph'])->name('image');
+
+Route::group(['middleware' => 'auth.user'], function () {
+    // Здесь ваши защищенные маршруты
+    Route::get('/login', [AuthController::class, 'login'])->name('auth.login');
+    Route::post('/login', [AuthController::class, 'auth'])->name('auth.login.post');
+    Route::get('/dashboard', [DashboardController::class,'index'])->name('main.dashboard');
+    Route::post('/dashboard', [AuthController::class,'logout'])->name('auth.logout');
+});
+Route::group(['middleware' => 'admin'], function () {
+    // Здесь ваши маршруты, которые могут проходить только администраторы
+    Route::get('/admin', [AdminController::class, 'index'])->name('admin.admin');
+    Route::post('/admin', [CategoryController::class, 'create'])->name('admin.admin.post');
+});
+
+
+Route::get('/papka', [ImageController::class, 'ppp'])->name('papka.ppp');
